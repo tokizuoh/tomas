@@ -1,4 +1,5 @@
 use clap::Parser;
+use regex::Regex;
 
 #[derive(Parser)]
 struct Input {
@@ -7,8 +8,9 @@ struct Input {
 
 fn parse(text: &str) -> String {
     if text.starts_with('#') {
-        let text_without_start_sharp = &text[1..];
-        let text_without_start_white_spaces = text_without_start_sharp.trim_start();
+        let re = Regex::new(r"^#+").unwrap();
+        let text_without_start_sharps = re.replace(text, "");
+        let text_without_start_white_spaces = text_without_start_sharps.trim_start();
         text_without_start_white_spaces.to_string()
     } else {
         // TODO: except '#'
@@ -30,8 +32,22 @@ fn test_parse_single_line_includes_sharp() {
 }
 
 #[test]
+fn test_parse_single_line_includes_multiple_sharps() {
+    let actual = parse("#####Hello");
+    let expected = "Hello";
+    assert_eq!(actual, expected)
+}
+
+#[test]
 fn test_parse_single_line_includes_sharp_and_white_space() {
     let actual = parse("# Hello");
+    let expected = "Hello";
+    assert_eq!(actual, expected)
+}
+
+#[test]
+fn test_parse_single_line_includes_multiple_sharps_and_white_space() {
+    let actual = parse("##### Hello");
     let expected = "Hello";
     assert_eq!(actual, expected)
 }
