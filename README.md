@@ -19,7 +19,7 @@ $tomas
 2. Input multi-line comments to be rewritten on a single line.
 3. Press Enter key
 
-Let's use pbcopy to translate them.
+Let's use `pbcopy` to translate them.
 
 ## Supported formats
 
