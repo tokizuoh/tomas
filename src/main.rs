@@ -1,9 +1,23 @@
-use clap::Parser;
 use regex::Regex;
+use std::io::BufRead;
 
-#[derive(Parser)]
-struct Input {
-    text: String,
+fn read_lines() -> Result<Vec<String>, std::io::Error> {
+    let mut lines: Vec<String> = Vec::new();
+
+    for line in std::io::stdin().lock().lines() {
+        match line {
+            Ok(line) => {
+                if line.trim().is_empty() {
+                    break;
+                }
+
+                lines.push(line);
+            }
+            Err(error) => return Err(error),
+        }
+    }
+
+    Ok(lines)
 }
 
 fn parse(text: &str) -> String {
@@ -24,9 +38,17 @@ fn parse(text: &str) -> String {
 }
 
 fn main() {
-    let args: Input = Input::parse();
-    let output = parse(&args.text);
-    println!("{}", output);
+    let lines = read_lines().unwrap();
+
+    let mut parsed_lines: Vec<String> = Vec::new();
+    for line in &lines {
+        let parsed = parse(&line);
+        parsed_lines.push(parsed);
+    }
+
+    let output = parsed_lines.join(" ");
+
+    println!("{:?}", output);
 }
 
 #[test]
