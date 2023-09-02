@@ -32,7 +32,7 @@ fn parse(text: &str) -> String {
         let text_without_start_white_spaces = text_without_start_slashes.trim_start();
         text_without_start_white_spaces.to_string()
     } else {
-        // TODO: except '#'
+        // TODO: except '#' and '//'
         text.to_string()
     }
 }
